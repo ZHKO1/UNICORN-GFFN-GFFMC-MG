@@ -5,6 +5,7 @@
       <app-sidebar></app-sidebar>
       <app-content></app-content>
     </app-view>
+    <div class="bg" style="background-position-y: 0px;"></div>
   </div>
 </template>
 
@@ -138,6 +139,16 @@
   body {
     margin: 0px;
     padding: 0px;
+  }
+  .bg {
+    background: url(./images/bg.png) no-repeat center top;
+    position: fixed;
+    height: 100%;
+    bottom: 10%;
+    right: 0;
+    left: 0;
+    top: 0;
+    z-index: 0;
   }
 
   .main {
