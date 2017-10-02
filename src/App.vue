@@ -1,0 +1,177 @@
+<template>
+  <div id="app">
+    <div class="main">
+      <div id="origin">
+        <img src="./images/origin.jpg">
+      </div>
+      <div id="gffn">
+        <img src="./images/gffn.png">
+      </div>
+      <div id="mc">
+        <img src="./images/MC.jpg">
+      </div>
+    </div>
+    <div calss="sub"></div>
+  </div>
+</template>
+
+<script>
+  import Hammer from "hammerjs"
+  export default {
+    methods: {
+
+    },
+    mounted () {
+      var img = document.querySelector("#gffn img");
+      img.ondragstart = function(){return false;};
+
+      var reqAnimationFrame = (function () {
+        return window[Hammer.prefixed(window, 'requestAnimationFrame')] || function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+          };
+      })();
+
+      var screen = document.querySelector("#origin");
+      var el = document.querySelector("#gffn");
+
+      var START_X = 0;
+      var START_Y = 0;
+      var ticking = false;
+      var transform;
+
+      var mc = new Hammer.Manager(el);
+
+      mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
+      mc.add(new Hammer.Rotate({ threshold: 0 })).recognizeWith(mc.get('pan'));
+      mc.add(new Hammer.Pinch({ threshold: 0 })).recognizeWith([mc.get('pan'), mc.get('rotate')]);
+
+      mc.on("panstart panmove", onPan);
+      mc.on("panend", onPanEnd);
+      mc.on("rotatestart rotatemove", onRotate);
+      mc.on("rotateend", onRotateEnd);
+      mc.on("pinchstart pinchmove", onPinch);
+      mc.on("pinchend", onPinchEnd);
+
+      function resetElement() {
+        transform = {
+          translate: { x: START_X, y: START_Y },
+          scale: 1,
+          angle: 0,
+          rx: 0,
+          ry: 0,
+          rz: 0
+        };
+        requestElementUpdate();
+      }
+
+      function updateElementTransform() {
+        var value = [
+          'translate3d(' + transform.translate.x + 'px, ' + transform.translate.y + 'px, 0)',
+          'scale(' + transform.scale + ', ' + transform.scale + ')',
+          'rotate3d('+ transform.rx +','+ transform.ry +','+ transform.rz +','+  transform.angle + 'deg)'
+        ];
+
+        value = value.join(" ");
+        el.style.webkitTransform = value;
+        el.style.mozTransform = value;
+        el.style.transform = value;
+        ticking = false;
+      }
+
+      function requestElementUpdate() {
+        if(!ticking) {
+          reqAnimationFrame(updateElementTransform);
+          ticking = true;
+        }
+      }
+
+      function onPan(ev) {
+        el.className = '';
+        transform.translate = {
+          x: START_X + ev.deltaX,
+          y: START_Y + ev.deltaY
+        };
+        requestElementUpdate();
+      }
+      function onPanEnd (ev) {
+        el.className = '';
+        transform.translate = {
+          x: START_X + ev.deltaX,
+          y: START_Y + ev.deltaY
+        };
+        requestElementUpdate();
+      }
+
+      var initScale = 1;
+      function onPinch(ev) {
+        if(ev.type == 'pinchstart') {
+          initScale = transform.scale || 1;
+        }
+
+        el.className = '';
+        transform.scale = initScale * ev.scale;
+
+        requestElementUpdate();
+      }
+
+      var initAngle = 0;
+      function onRotate(ev) {
+        if(ev.type == 'rotatestart') {
+          initAngle = transform.angle || 0;
+        }
+
+        el.className = '';
+        transform.rz = 1;
+        transform.angle = initAngle + ev.rotation;
+
+        requestElementUpdate();
+      }
+      resetElement();
+    }
+  }
+</script>
+
+<style lang="less">
+  body {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .main {
+    position: relative;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    #origin {
+      position: absolute;
+      width: 1024px;
+      top: 0px;
+      z-index: 1;
+      img {
+        width: 100%;
+        display: block;
+      }
+    }
+    #gffn {
+      position: absolute;
+      width: 464px;
+      top: 0px;
+      left: 22px;
+      z-index: 2;
+      opacity: 1;
+      img {
+        width: 100%;
+        display: block;
+      }
+    }
+    #mc {
+      display: none;
+      position: absolute;
+      width: 1024px;
+      img {
+        width: 100%;
+        display: block;
+      }
+    }
+  }
+</style>
