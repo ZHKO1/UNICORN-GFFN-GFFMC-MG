@@ -1,25 +1,28 @@
 <template>
   <div id="app">
-    <div class="main">
-      <div id="origin">
-        <img src="./images/origin.jpg">
-      </div>
-      <div id="gffn">
-        <img src="./images/gffn.png">
-      </div>
-      <div id="mc">
-        <img src="./images/MC.jpg">
-      </div>
-    </div>
-    <div calss="sub"></div>
+    <app-nav></app-nav>
+    <app-view>
+      <app-sidebar></app-sidebar>
+      <app-content></app-content>
+    </app-view>
   </div>
 </template>
 
 <script>
   import Hammer from "hammerjs"
+  import appNav from './components/appNav'
+  import appView from './components/appView'
+  import appSidebar from './components/appSidebar'
+  import appContent from './components/appContent'
   export default {
     methods: {
 
+    },
+    components: {
+      appNav,
+      appView,
+      appSidebar,
+      appContent
     },
     mounted () {
       var img = document.querySelector("#gffn img");
