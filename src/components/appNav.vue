@@ -4,7 +4,7 @@
       <img src="./../images/h1.png" alt="">
     </div>
     <div class="Navbar-title">
-      FUCK YOU
+      div
     </div>
     <div class="Navbar-functionality">
       <img src="./../images/h2.png" alt="">
