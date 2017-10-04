@@ -12,9 +12,8 @@ export default {
   data () {
     return {
       layers: [
-        {id:0, pic:"./static/images/content/origin.jpg", x:0, y:0},
-        {id:1, pic:"./static/images/content/GFFN.png", x:0, y:0},
-        {id:2, pic:"./static/images/content/MC.jpg", x:0, y:0},
+        {id:0, pic:"./static/images/content/GFFN_ArtWork.jpg", x:0, y:0},
+        {id:1, pic:"./static/images/content/GFFN.png", x:0, y:0}
       ]
     }
   },
