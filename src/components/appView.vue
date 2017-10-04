@@ -1,6 +1,5 @@
 <template>
   <div class="appView">
-    <div>{{msg}}</div>
     <slot></slot>
   </div>
 </template>

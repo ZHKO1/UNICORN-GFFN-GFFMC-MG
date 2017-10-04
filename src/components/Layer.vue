@@ -1,67 +1,54 @@
 <template>
-  <div class="layer">
-    <img ref="img" :src="pic" draggable="false">
+  <div class="layer" :style="style">
+    <img ref="img" :src="pic" draggable="false" ondragstart="(function(){return false})()">
   </div>
 </template>
 
 <script>
 import Hammer from "hammerjs"
+import {reqAnimationFrame} from "./../lib/drag.js"
 export default {
   name: 'layer',
   data () {
+    var that = this;
     return {
-      pic: './static/images/content/origin.jpg',
-      START_X: 0,
-      START_Y: 0,
       ticking: false,
-    }
-  },
-  methods: {
-    dragstart(){
-      return false;
-    }
-  },
-  mounted () {
-    var img = document.querySelector("#gffn img");
-    img.ondragstart = function(){return false;};
-
-    var reqAnimationFrame = (function () {
-      return window[Hammer.prefixed(window, 'requestAnimationFrame')] || function (callback) {
-          window.setTimeout(callback, 1000 / 60);
-        };
-    })();
-
-    var screen = document.querySelector("#origin");
-    var el = document.querySelector("#gffn");
-
-    var transform;
-
-    var mc = new Hammer.Manager(el);
-
-    mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
-    mc.add(new Hammer.Rotate({ threshold: 0 })).recognizeWith(mc.get('pan'));
-    mc.add(new Hammer.Pinch({ threshold: 0 })).recognizeWith([mc.get('pan'), mc.get('rotate')]);
-
-    mc.on("panstart panmove", onPan);
-    mc.on("panend", onPanEnd);
-    mc.on("rotatestart rotatemove", onRotate);
-    mc.on("rotateend", onRotateEnd);
-    mc.on("pinchstart pinchmove", onPinch);
-    mc.on("pinchend", onPinchEnd);
-
-    function resetElement() {
-      transform = {
-        translate: { x: START_X, y: START_Y },
+      X: that.START_X,
+      Y: that.START_Y,
+      transform : {
+        translate: { x: 0, y: 0 },
         scale: 1,
         angle: 0,
         rx: 0,
         ry: 0,
         rz: 0
-      };
-      requestElementUpdate();
+      },
+      style: {
+        "z-index": that.zIndex + 2,
+      }
     }
-
-    function updateElementTransform() {
+  },
+  props: {
+    zIndex: Number,
+    pic: String,
+    type: {
+      type: String,
+      default: 'art'
+    },
+    START_X: {
+      type: Number,
+      default: 0
+    },
+    START_Y: {
+      type: Number,
+      default: 0
+    }
+  },
+  methods: {
+    updateElementTransform() {
+      var that = this;
+      var transform = that.transform;
+      var el = that.$refs.img;
       var value = [
         'translate3d(' + transform.translate.x + 'px, ' + transform.translate.y + 'px, 0)',
         'scale(' + transform.scale + ', ' + transform.scale + ')',
@@ -72,62 +59,70 @@ export default {
       el.style.webkitTransform = value;
       el.style.mozTransform = value;
       el.style.transform = value;
-      ticking = false;
-    }
-
-    function requestElementUpdate() {
-      if(!ticking) {
-        reqAnimationFrame(updateElementTransform);
-        ticking = true;
+      that.ticking = false;
+    },
+    requestElementUpdate() {
+      var that = this;
+      if(!that.ticking) {
+        reqAnimationFrame(that.updateElementTransform);
+        that.ticking = true;
       }
-    }
-
-    function onPan(ev) {
+    },
+    onPan(ev) {
+      var that = this;
+      var el = this.$refs.img;
       el.className = '';
-      transform.translate = {
-        x: START_X + ev.deltaX,
-        y: START_Y + ev.deltaY
+      that.transform.translate = {
+        x: that.X + ev.deltaX,
+        y: that.Y + ev.deltaY
       };
-      requestElementUpdate();
-    }
-    function onPanEnd (ev) {
+      that.requestElementUpdate();
+    },
+    onPanEnd (ev) {
+      var that = this;
+      var el = this.$refs.img;
       el.className = '';
-      transform.translate = {
-        x: START_X + ev.deltaX,
-        y: START_Y + ev.deltaY
+      that.transform.translate = {
+        x: that.X + ev.deltaX,
+        y: that.Y + ev.deltaY
       };
-      requestElementUpdate();
+      that.X = that.transform.translate.x;
+      that.Y = that.transform.translate.y;
+      that.requestElementUpdate();
     }
+  },
+  mounted () {
+    var that = this;
+    var el = this.$refs.img;
+    var mc = new Hammer.Manager(el);
+    mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
+    mc.on("panstart panmove", this.onPan);
+    mc.on("panend", this.onPanEnd);
+    that.transform = {
+      translate: { x: that.X, y: that.Y },
+      scale: 1,
+      angle: 0,
+      rx: 0,
+      ry: 0,
+      rz: 0
+    };
+    that.requestElementUpdate();
 
-    var initScale = 1;
-    function onPinch(ev) {
-      if(ev.type == 'pinchstart') {
-        initScale = transform.scale || 1;
-      }
-
-      el.className = '';
-      transform.scale = initScale * ev.scale;
-
-      requestElementUpdate();
-    }
-
-    var initAngle = 0;
-    function onRotate(ev) {
-      if(ev.type == 'rotatestart') {
-        initAngle = transform.angle || 0;
-      }
-
-      el.className = '';
-      transform.rz = 1;
-      transform.angle = initAngle + ev.rotation;
-
-      requestElementUpdate();
-    }
-    resetElement();
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="less">
+  .layer{
+    position: absolute;
+    width: 90vw;
+    height: 80vh;
+    img{
+      display: block;
+      max-width: 90vw;
+      max-height: 80vh;
+      margin: 0 auto;
+    }
+  }
 </style>

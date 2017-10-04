@@ -33,6 +33,8 @@
   body {
     margin: 0px;
     padding: 0px;
+    min-widh: 840px;
+    min-height: 600px;
   }
   .bg {
     background: url(./images/bg.png) no-repeat center top;
