@@ -33,7 +33,7 @@
   body {
     margin: 0px;
     padding: 0px;
-    min-widh: 840px;
+    min-width: 900px;
     min-height: 600px;
   }
   .bg {

@@ -32,5 +32,6 @@ export default {
     margin-top:calc(10vh - 30px);
     margin-left:5vw;
     position: relative;
+    z-index: 1;
   }
 </style>
