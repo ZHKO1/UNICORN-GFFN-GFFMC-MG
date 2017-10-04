@@ -113,7 +113,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
+<style scoped rel="stylesheet/less" lang="less">
   .layer{
     position: absolute;
     width: 90vw;

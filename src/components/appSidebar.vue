@@ -1,11 +1,11 @@
 <template>
-  <div class="appSideBar">
-    <div class="switchSideBar" style="">
-      <i class="fa fa-angle-right"></i>
+  <div class="appSideBar" ref="sideBar">
+    <div class="switchSideBarButton" :class="{'hide' : showSide}" @click.prevent="toggleSideBar">
+      <img src="./../images/sideBar.gif" alt="" />
     </div>
-    <div class="main">
+    <div class="main" :class="{'show' : showSide}">
       <ul>
-        <li v-for="item in SideLi" @click="toggleLi(item.id)">{{item.name}}<i class="fa" :class="{'fa-check' : item.show}"></i></li>
+        <li v-for="item in SideLi" @click.prevent="toggleLi(item.id)">{{item.name}}<i class="fa" :class="{'fa-check' : item.show}"></i></li>
       </ul>
     </div>
   </div>
@@ -18,6 +18,7 @@ export default {
   name: 'appSideBar',
   data () {
     return {
+      showSide: false,
       SideLi: [
         {id:0, name:"FIX G.F.F.N ArtWork", show: true},
         {id:1, name:"FIX G.F.F.N Toy", show: true},
@@ -29,49 +30,57 @@ export default {
     }
   },
   methods: {
+    toggleSideBar(){
+      this.showSide = !this.showSide;
+    },
     toggleLi(id) {
       var that = this;
       Vue.set(that.SideLi[id], "show", that.SideLi[id].show? (!that.SideLi[id].show): true);
     }
   },
+  mounted () {
+    var that = this;
+    document.addEventListener('click', (e) => {
+      if (!that.$refs.sideBar.contains(e.target)) this.showSide = false
+    })
+  }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
+<style scoped rel="stylesheet/less" lang="less">
 @import "./../lib/style/font-awesome/css/font-awesome.css";
 .appSideBar{
-  .switchSideBar{
-    background-color: #58b7ff;
+  position: relative;
+  z-index: 3;
+  .switchSideBarButton{
     position: fixed;
-    left: 50px;
+    left: 0px;
     top: 150px;
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
+    width: 180px;
+    height:50px;
     cursor: pointer;
-    opacity: .4;
+    opacity: 1;
     transition: .3s;
-    i{
-      color: #fff;
+    img{
       display: block;
-      line-height: 50px;
-      text-align: center;
-      font-size: 2.5em;
+      width: 100%;
+    }
+    &.hide{
+       opacity: 0;
     }
   }
 
   .main{
-    display: none;
+    transition: .3s;
     position: fixed;
     width: 280px;
     height: 80vh;
     background: rgba(255, 255, 255, 0.8);
-    left: 0px;
+    left: -280px;
     font-family: 'Lucida Grande','Hiragino Kaku Gothic Pro','ヒラギノ角ゴ Pro W3','ＭＳ Ｐゴシック', sans-serif;
     font-weight: normal;
     color: #222;
-    z-index:2;
     ul{
       clear: left;
       margin: 1em;
@@ -104,6 +113,9 @@ export default {
           transition: all .3s;
         }
       }
+    }
+    &.show{
+      left:0px;
     }
   }
 }
