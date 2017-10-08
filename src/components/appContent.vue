@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <layer v-for="item in layers" :pic="item.pic" :START_X="item.x" :START_Y="item.y" :zIndex="item.id" :key="item.id"></layer>
+    <layer v-for="item in Side" v-if="item.show" :pic="item.pic" :START_X="item.x" :START_Y="item.y" :zIndex="item.id" :key="item.id"></layer>
   </div>
 </template>
 
@@ -11,11 +11,10 @@ export default {
   name: 'appContent',
   data () {
     return {
-      layers: [
-        {id:0, pic:"./static/images/content/GFFN_ArtWork.jpg", x:0, y:0},
-        {id:1, pic:"./static/images/content/GFFN.png", x:0, y:0}
-      ]
     }
+  },
+  props: {
+    Side: Array,
   },
   components: {
     Layer

@@ -2,8 +2,8 @@
   <div id="app">
     <app-nav></app-nav>
     <app-view>
-      <app-sidebar></app-sidebar>
-      <app-content></app-content>
+      <app-sidebar :SideLi="SideLi"></app-sidebar>
+      <app-content :Side="SideLi"></app-content>
     </app-view>
     <div class="bg" style="background-position-y: 0px;"></div>
   </div>
@@ -16,8 +16,20 @@
   import appSidebar from './components/appSidebar'
   import appContent from './components/appContent'
   export default {
+    data () {
+      return {
+        showSide: false,
+        SideLi: [
+          {id:0, name:"FIX G.F.F.N ArtWork", pic:"./static/images/content/GFFN_ArtWork.jpg", show: true},
+          {id:1, name:"FIX G.F.F.N Toy", pic:"./static/images/content/GFFN.png", show: true},
+          {id:2, name:"FIX MC  ArtWork", pic:"./static/images/content/MC_ArtWork.jpg"},
+          {id:3, name:"FIX MC  Toy", pic:"./static/images/content/MC.jpg"},
+          {id:4, name:"MG Ver.Ka  ArtWork"},
+          {id:5, name:"MG Ver.Ka  Toy"},
+        ]
+      }
+    },
     methods: {
-
     },
     components: {
       appNav,

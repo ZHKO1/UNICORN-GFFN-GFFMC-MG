@@ -16,17 +16,12 @@ import Vue from 'vue'
 
 export default {
   name: 'appSideBar',
+  props: {
+    SideLi: Array,
+  },
   data () {
     return {
       showSide: false,
-      SideLi: [
-        {id:0, name:"FIX G.F.F.N ArtWork", show: true},
-        {id:1, name:"FIX G.F.F.N Toy", show: true},
-        {id:2, name:"FIX MC  ArtWork"},
-        {id:3, name:"FIX MC  Toy"},
-        {id:4, name:"MG Ver.Ka  ArtWork"},
-        {id:5, name:"MG Ver.Ka  Toy"},
-      ]
     }
   },
   methods: {
@@ -41,7 +36,9 @@ export default {
   mounted () {
     var that = this;
     document.addEventListener('click', (e) => {
-      if (!that.$refs.sideBar.contains(e.target)) this.showSide = false
+      if (!that.$refs.sideBar.contains(e.target)){
+        that.showSide = false;
+      }
     })
   }
 }
