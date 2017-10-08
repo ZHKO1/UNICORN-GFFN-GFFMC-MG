@@ -89,6 +89,7 @@ export default {
       that.X = that.transform.translate.x;
       that.Y = that.transform.translate.y;
       that.requestElementUpdate();
+      that.$emit("dragSide", that.zIndex, that.X, that.Y);
     }
   },
   mounted () {

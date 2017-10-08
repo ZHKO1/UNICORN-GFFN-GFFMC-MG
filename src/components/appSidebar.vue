@@ -30,7 +30,9 @@ export default {
     },
     toggleLi(id) {
       var that = this;
-      Vue.set(that.SideLi[id], "show", that.SideLi[id].show? (!that.SideLi[id].show): true);
+      var show = that.SideLi[id].show? (!that.SideLi[id].show): true;
+      //Vue.set(that.SideLi[id], "show", show);
+      that.$emit("toggleLi", id, show);
     }
   },
   mounted () {

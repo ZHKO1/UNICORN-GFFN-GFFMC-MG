@@ -2,14 +2,15 @@
   <div id="app">
     <app-nav></app-nav>
     <app-view>
-      <app-sidebar :SideLi="SideLi"></app-sidebar>
-      <app-content :Side="SideLi"></app-content>
+      <app-sidebar :SideLi="SideLi" v-on:toggleLi="toggleSide"></app-sidebar>
+      <app-content :Side="SideLi" v-on:dragSide="dragSide"></app-content>
     </app-view>
     <div class="bg" style="background-position-y: 0px;"></div>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
   import Hammer from "hammerjs"
   import appNav from './components/appNav'
   import appView from './components/appView'
@@ -30,6 +31,16 @@
       }
     },
     methods: {
+      toggleSide (id, show){
+        var that = this;
+        Vue.set(that.SideLi[id], "show", show);
+      },
+      dragSide (id, x, y){
+        console.log(arguments)
+        var that = this;
+        Vue.set(that.SideLi[id], "x", x);
+        Vue.set(that.SideLi[id], "y", y);
+      }
     },
     components: {
       appNav,
