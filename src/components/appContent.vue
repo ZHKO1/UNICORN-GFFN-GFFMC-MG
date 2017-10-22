@@ -1,29 +1,34 @@
 <template>
   <div class="content">
-    <layer v-for="item in Side" v-if="item.show" :pic="item.pic" :START_X="item.x" :START_Y="item.y" :zIndex="item.id" :key="item.id"  @dragSide="dragSide"></layer>
+    <layer v-for="item in Side" v-if="item.show" :pic="item.pic" :START_X="item.x" :START_Y="item.y" :zIndex="item.id" :key="item.id"  @dragSide="dragSide_"></layer>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
+import {mapMutations, mapState, mapGetters} from 'vuex'
 
 import Hammer from "hammerjs"
 import Layer from './Layer'
+
 export default {
   name: 'appContent',
   data () {
     return {
     }
   },
-  props: {
-    Side: Array,
-  },
   methods:{
-    dragSide (id, x, y){
-      var that = this;
-      Vue.set(that.Side[id], "x", x);
-      Vue.set(that.Side[id], "y", y);
-    }
+    dragSide_(id, x, y){
+      this.$store.commit('dragSide', {id, x, y})
+    },
+    ...mapMutations([
+      'dragSide'
+    ])
+  },
+  computed: {
+    ...mapState({
+      Side: state => state.SideService.SideLi,
+    })
   },
   components: {
     Layer

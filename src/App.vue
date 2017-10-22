@@ -16,31 +16,18 @@
   import appView from './components/appView'
   import appSidebar from './components/appSidebar'
   import appContent from './components/appContent'
+  import {mapMutations, mapState, mapGetters} from 'vuex'
+
   export default {
     data () {
       return {
         showSide: false,
-        SideLi: [
-          {id:0, name:"FIX G.F.F.N ArtWork", pic:"./static/images/content/GFFN_ArtWork.jpg", show: true},
-          {id:1, name:"FIX G.F.F.N Toy", pic:"./static/images/content/GFFN.png", show: true},
-          {id:2, name:"FIX MC  ArtWork", pic:"./static/images/content/MC_ArtWork.jpg"},
-          {id:3, name:"FIX MC  Toy", pic:"./static/images/content/MC.jpg"},
-          {id:4, name:"MG Ver.Ka  ArtWork"},
-          {id:5, name:"MG Ver.Ka  Toy"},
-        ]
       }
     },
     methods: {
-      toggleSide (id, show){
-        var that = this;
-        Vue.set(that.SideLi[id], "show", show);
-      },
-      dragSide (id, x, y){
-        console.log(arguments)
-        var that = this;
-        Vue.set(that.SideLi[id], "x", x);
-        Vue.set(that.SideLi[id], "y", y);
-      }
+      ...mapMutations([
+        'toggleSide'
+      ])
     },
     components: {
       appNav,
@@ -48,7 +35,11 @@
       appSidebar,
       appContent
     },
-
+    computed: {
+      ...mapState({
+        SideLi: state => state.SideService.SideLi,
+      })
+    },
   }
 </script>
 

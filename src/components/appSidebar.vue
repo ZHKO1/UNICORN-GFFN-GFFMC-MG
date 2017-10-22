@@ -13,12 +13,10 @@
 
 <script>
 import Vue from 'vue'
+import {mapMutations, mapState, mapGetters} from 'vuex'
 
 export default {
   name: 'appSideBar',
-  props: {
-    SideLi: Array,
-  },
   data () {
     return {
       showSide: false,
@@ -29,11 +27,16 @@ export default {
       this.showSide = !this.showSide;
     },
     toggleLi(id) {
-      var that = this;
-      var show = that.SideLi[id].show? (!that.SideLi[id].show): true;
-      //Vue.set(that.SideLi[id], "show", show);
-      that.$emit("toggleLi", id, show);
-    }
+      this.$store.commit('toggleSide', id)
+    },
+    ...mapMutations([
+      'toggleSide'
+    ])
+  },
+  computed: {
+    ...mapState({
+      SideLi: state => state.SideService.SideLi,
+    })
   },
   mounted () {
     var that = this;
