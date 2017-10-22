@@ -3,7 +3,7 @@
     <app-nav></app-nav>
     <app-view>
       <app-sidebar :SideLi="SideLi" v-on:toggleLi="toggleSide"></app-sidebar>
-      <app-content :Side="SideLi" v-on:dragSide="dragSide"></app-content>
+      <app-content :Side="SideLi"></app-content>
     </app-view>
     <div class="bg" style="background-position-y: 0px;"></div>
   </div>
