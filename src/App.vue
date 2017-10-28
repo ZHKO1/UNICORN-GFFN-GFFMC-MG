@@ -2,8 +2,8 @@
   <div id="app">
     <app-nav></app-nav>
     <app-view>
-      <app-sidebar :SideLi="SideLi" v-on:toggleLi="toggleSide"></app-sidebar>
-      <app-content :Side="SideLi"></app-content>
+      <app-sidebar></app-sidebar>
+      <app-content></app-content>
     </app-view>
     <div class="bg" style="background-position-y: 0px;"></div>
   </div>
@@ -16,7 +16,6 @@
   import appView from './components/appView'
   import appSidebar from './components/appSidebar'
   import appContent from './components/appContent'
-  import {mapMutations, mapState, mapGetters} from 'vuex'
 
   export default {
     data () {
@@ -25,20 +24,12 @@
       }
     },
     methods: {
-      ...mapMutations([
-        'toggleSide'
-      ])
     },
     components: {
       appNav,
       appView,
       appSidebar,
       appContent
-    },
-    computed: {
-      ...mapState({
-        SideLi: state => state.SideService.SideLi,
-      })
     },
   }
 </script>
