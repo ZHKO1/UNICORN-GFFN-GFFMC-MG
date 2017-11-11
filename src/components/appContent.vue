@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <layer v-for="item in Side" v-if="item.show" :pic="item.pic" :START_X="item.x" :START_Y="item.y" :zIndex="item.id" :key="item.id"  @dragSide="dragSide_"></layer>
+    <layer v-for="(item, index) in Side" v-if="item.show" :pic="item.pic" :START_X="item.x" :START_Y="item.y" :key="index" :zIndex="(index + 2)"  @dragSide="dragSide_"></layer>
   </div>
 </template>
 

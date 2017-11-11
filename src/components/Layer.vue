@@ -24,7 +24,7 @@ export default {
         rz: 0
       },
       style: {
-        "z-index": that.zIndex + 2,
+        "z-index": that.zIndex,
       }
     }
   },

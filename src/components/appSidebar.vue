@@ -5,7 +5,7 @@
     </div>
     <div class="main" :class="{'show' : showSide}">
       <ul>
-        <li v-for="item in SideLi" @click.prevent="toggleLi(item.id)">{{item.name}}<i class="fa" :class="{'fa-check' : item.show}"></i></li>
+        <li v-for="(item, index) in SideLi" @click.prevent="toggleLi(index)">{{item.name}}<i class="fa" :class="{'fa-check' : item.show}"></i></li>
       </ul>
     </div>
   </div>
