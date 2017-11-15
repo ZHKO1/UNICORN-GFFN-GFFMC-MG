@@ -1,6 +1,26 @@
 <template>
   <div class="layer" :style="style">
     <img ref="img" :src="pic" draggable="false" ondragstart="(function(){return false})()">
+    <div class="layer_options">
+      <el-form label-position="left" label-width="80px" :model="transform">
+        <el-form-item label="x">
+          <el-input v-model="transform.translate.x"></el-input>
+        </el-form-item>
+        <el-form-item label="y">
+          <el-input v-model="transform.translate.y"></el-input>
+        </el-form-item>
+        <el-form-item label="angle">
+          <el-input v-model="transform.angle"></el-input>
+        </el-form-item>
+        <el-form-item label="angle">
+          <el-input v-model="transform.scale"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm()">Save</el-button>
+          <el-button @click="resetForm('ruleForm')">Reset</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
@@ -124,6 +144,13 @@ export default {
       max-width: 90vw;
       max-height: 80vh;
       margin: 0 auto;
+    }
+    .layer_options{
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      padding: 30px;
+      background: yellow;
     }
   }
 </style>

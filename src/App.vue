@@ -40,6 +40,8 @@
     padding: 0px;
     min-width: 900px;
     min-height: 600px;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
   .bg {
     background: url(./images/bg.png) no-repeat center top;
