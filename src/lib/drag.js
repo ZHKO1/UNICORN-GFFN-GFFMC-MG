@@ -6,7 +6,6 @@ var reqAnimationFrame = (function () {
     };
 })();
 
-
 export {
   reqAnimationFrame,
 

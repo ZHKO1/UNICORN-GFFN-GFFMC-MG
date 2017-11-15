@@ -5,7 +5,9 @@
     </div>
     <div class="main" :class="{'show' : showSide}">
       <ul id="List">
-        <li v-for="(item, index) in SideLi">{{item.name}}<i class="fa fa-check"  @click.prevent="toggleLi(index)" :class="{'hidden' : !item.show}"></i></li>
+        <draggable v-model="SideLi">
+          <li v-for="(item, index) in SideLi">{{item.name}}<i class="fa fa-check"  @click.prevent="toggleLi(index)" :class="{'hidden' : !item.show}"></i></li>
+        </draggable>
       </ul>
     </div>
   </div>
@@ -15,6 +17,7 @@
 import Vue from 'vue'
 import {mapMutations, mapState, mapGetters} from 'vuex'
 import slipjs from 'slipjs'
+import draggable from 'vuedraggable'
 
 export default {
   name: 'appSideBar',
@@ -22,6 +25,9 @@ export default {
     return {
       showSide: false,
     }
+  },
+  components: {
+    draggable
   },
   methods: {
     toggleSideBar(){
@@ -35,9 +41,14 @@ export default {
     ])
   },
   computed: {
-    ...mapState({
-      SideLi: state => state.SideService.SideLi,
-    })
+    SideLi: {
+      get() {
+        return this.$store.state.SideService.SideLi
+      },
+      set(value) {
+        this.$store.commit('reorderSide', value)
+      }
+    }
   },
   mounted () {
     var that = this;
