@@ -5,7 +5,7 @@
     </div>
     <div class="main" :class="{'show' : showSide}">
       <ul id="List">
-        <li v-for="(item, index) in SideLi">{{item.name}}<i class="fa"  @click.prevent="toggleLi(index)" :class="{'fa-check' : item.show}"></i></li>
+        <li v-for="(item, index) in SideLi">{{item.name}}<i class="fa fa-check"  @click.prevent="toggleLi(index)" :class="{'hidden' : !item.show}"></i></li>
       </ul>
     </div>
   </div>
@@ -41,40 +41,6 @@ export default {
   },
   mounted () {
     var that = this;
-    document.addEventListener('click', (e) => {
-      if (!that.$refs.sideBar.contains(e.target)){
-        that.showSide = false;
-      }
-    });
-    var ol = document.getElementById('List');
-    ol.addEventListener('slip:beforereorder', function(e){
-      if (/demo-no-reorder/.test(e.target.className)) {
-        e.preventDefault();
-      }
-    }, false);
-    ol.addEventListener('slip:beforeswipe', function(e){
-      if (e.target.nodeName == 'INPUT' || /demo-no-swipe/.test(e.target.className)) {
-        e.preventDefault();
-      }
-    }, false);
-    ol.addEventListener('slip:beforewait', function(e){
-      if (e.target.className.indexOf('instant') > -1) e.preventDefault();
-    }, false);
-    ol.addEventListener('slip:afterswipe', function(e){
-      e.target.parentNode.appendChild(e.target);
-    }, false);
-    ol.addEventListener('slip:reorder', function(e){
-      that.$store.commit('reorderSide', {
-        originalIndex: e.detail.originalIndex,
-        spliceIndex: e.detail.spliceIndex,
-      });
-
-      // And update the DOM:
-      //e.target.parentNode.insertBefore(e.target, e.detail.insertBefore);
-      return false;
-    }, false);
-
-    new Slip(ol);
   }
 }
 </script>
@@ -143,6 +109,9 @@ export default {
           text-align: center;
           color: #222;
           transition: all .3s;
+          &.hidden{
+            opacity: 0;
+          }
         }
         &.slip-reordering{
           background: yellow;
