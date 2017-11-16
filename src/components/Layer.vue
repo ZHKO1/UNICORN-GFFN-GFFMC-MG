@@ -2,7 +2,7 @@
   <div class="layer" :style="style">
     <img ref="img" :src="pic" draggable="false" ondragstart="(function(){return false})()">
     <div class="layer_options">
-      <el-form label-position="left" label-width="80px" :model="transform">
+      <el-form label-position="left" label-width="50px" :model="transform">
         <el-form-item label="x">
           <el-input v-model="transform.translate.x"></el-input>
         </el-form-item>
@@ -15,11 +15,9 @@
         <el-form-item label="angle">
           <el-input v-model="transform.scale"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm()">Save</el-button>
-          <el-button @click="resetForm('ruleForm')">Reset</el-button>
-        </el-form-item>
       </el-form>
+      <el-button type="primary" @click="submitOptions()">Save</el-button>
+      <el-button @click="resetOptions()">Reset</el-button>
     </div>
   </div>
 </template>
@@ -49,6 +47,7 @@ export default {
     }
   },
   props: {
+    layerID: Number,
     zIndex: Number,
     pic: String,
     type: {
@@ -93,8 +92,8 @@ export default {
       var el = this.$refs.img;
       el.className = '';
       that.transform.translate = {
-        x: that.X + ev.deltaX,
-        y: that.Y + ev.deltaY
+        x: parseInt(that.X) + ev.deltaX,
+        y: parseInt(that.Y) + ev.deltaY
       };
       that.requestElementUpdate();
     },
@@ -103,13 +102,29 @@ export default {
       var el = this.$refs.img;
       el.className = '';
       that.transform.translate = {
-        x: that.X + ev.deltaX,
-        y: that.Y + ev.deltaY
+        x: parseInt(that.X) + ev.deltaX,
+        y: parseInt(that.Y) + ev.deltaY
       };
+      that.X = parseInt(that.transform.translate.x);
+      that.Y = parseInt(that.transform.translate.y);
+      that.requestElementUpdate();
+      that.$emit("dragSide", that.layerID, that.X, that.Y);
+    },
+    submitOptions() {
+      var that = this;
       that.X = that.transform.translate.x;
       that.Y = that.transform.translate.y;
       that.requestElementUpdate();
-      that.$emit("dragSide", that.zIndex, that.X, that.Y);
+      that.$emit("dragSide", that.layerID, that.X, that.Y);
+    },
+    resetOptions() {
+      var that = this;
+      that.transform.translate.x = 0;
+      that.transform.translate.y = 0;
+      that.X = that.transform.translate.x;
+      that.Y = that.transform.translate.y;
+      that.requestElementUpdate();
+      that.$emit("dragSide", that.layerID, that.X, that.Y);
     }
   },
   mounted () {
@@ -144,13 +159,17 @@ export default {
       max-width: 90vw;
       max-height: 80vh;
       margin: 0 auto;
+
     }
     .layer_options{
       position: absolute;
+      width: 180px;
       top: 0px;
       right: 0px;
       padding: 30px;
-      background: yellow;
+      background: white;
+      border-radius: 15px;
+      border: 1px solid #D3D3D3;
     }
   }
 </style>
