@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <layer v-for="(item, index) in Side" v-if="item.show" :pic="item.pic" :START_X="item.x" :START_Y="item.y" :key="index" :layerID="index" :zIndex="(index + 2)"  @dragSide="dragSide_"></layer>
+    <layer v-for="(item, index) in Side" v-if="item.show" :pic="item.pic" :START_X="item.x" :START_Y="item.y" :START_ANGLE="item.angle" :START_SCALE="item.scale" :key="index" :layerID="index" :zIndex="(index + 2)" ></layer>
   </div>
 </template>
 
@@ -18,9 +18,6 @@ export default {
     }
   },
   methods:{
-    dragSide_(id, x, y){
-      this.$store.commit('dragSide', {id, x, y})
-    },
     ...mapMutations([
       'dragSide'
     ])

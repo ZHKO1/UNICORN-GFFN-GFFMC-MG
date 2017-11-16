@@ -12,7 +12,7 @@
         <el-form-item label="angle">
           <el-input v-model="transform.angle"></el-input>
         </el-form-item>
-        <el-form-item label="angle">
+        <el-form-item label="scale">
           <el-input v-model="transform.scale"></el-input>
         </el-form-item>
       </el-form>
@@ -34,12 +34,12 @@ export default {
       X: that.START_X,
       Y: that.START_Y,
       transform : {
-        translate: { x: 0, y: 0 },
-        scale: 1,
-        angle: 0,
+        translate: { x: that.START_X, y: that.START_Y },
+        scale: that.START_SCALE,
+        angle: that.START_ANGLE,
         rx: 0,
         ry: 0,
-        rz: 0
+        rz: 1
       },
       style: {
         "z-index": that.zIndex,
@@ -61,6 +61,14 @@ export default {
     START_Y: {
       type: Number,
       default: 0
+    },
+    START_ANGLE: {
+      type: Number,
+      default: 0
+    },
+    START_SCALE: {
+      type: Number,
+      default: 1
     }
   },
   methods: {
@@ -108,14 +116,26 @@ export default {
       that.X = parseInt(that.transform.translate.x);
       that.Y = parseInt(that.transform.translate.y);
       that.requestElementUpdate();
-      that.$emit("dragSide", that.layerID, that.X, that.Y);
+      that.$store.commit('dragSide', {
+        id: that.layerID,
+        x: that.X,
+        y: that.Y,
+        angle: that.transform.angle,
+        scale: that.transform.scale
+      })
     },
     submitOptions() {
       var that = this;
-      that.X = that.transform.translate.x;
-      that.Y = that.transform.translate.y;
+      that.X = parseInt(that.transform.translate.x);
+      that.Y = parseInt(that.transform.translate.y);
       that.requestElementUpdate();
-      that.$emit("dragSide", that.layerID, that.X, that.Y);
+      that.$store.commit('dragSide', {
+        id: that.layerID,
+        x: that.X,
+        y: that.Y,
+        angle: that.transform.angle,
+        scale: that.transform.scale
+      })
     },
     resetOptions() {
       var that = this;
@@ -123,27 +143,27 @@ export default {
       that.transform.translate.y = 0;
       that.X = that.transform.translate.x;
       that.Y = that.transform.translate.y;
+      that.transform.angle = 0;
+      that.transform.scale = 1;
       that.requestElementUpdate();
-      that.$emit("dragSide", that.layerID, that.X, that.Y);
+      that.$store.commit('dragSide', {
+        id: that.layerID,
+        x: that.X,
+        y: that.Y,
+        angle: that.transform.angle,
+        scale: that.transform.scale
+      })
     }
   },
   mounted () {
     var that = this;
+    console.log(that.transform);
     var el = this.$refs.img;
     var mc = new Hammer.Manager(el);
     mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
     mc.on("panstart panmove", this.onPan);
     mc.on("panend", this.onPanEnd);
-    that.transform = {
-      translate: { x: that.X, y: that.Y },
-      scale: 1,
-      angle: 0,
-      rx: 0,
-      ry: 0,
-      rz: 0
-    };
     that.requestElementUpdate();
-
   }
 }
 </script>

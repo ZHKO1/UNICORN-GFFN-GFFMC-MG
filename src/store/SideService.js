@@ -15,9 +15,13 @@ export default {
       Vue.set(state.SideLi[id], "show", show);
     },
 
-    dragSide (state, {id, x, y}){
-      Vue.set(state.SideLi[id], "x", x);
-      Vue.set(state.SideLi[id], "y", y);
+    dragSide (state, options){
+      console.log(options);
+      var id = options.id;
+      Vue.set(state.SideLi[id], "x", options.x);
+      Vue.set(state.SideLi[id], "y", options.y);
+      Vue.set(state.SideLi[id], "angle", options.angle);
+      Vue.set(state.SideLi[id], "scale", options.scale);
     },
 
     reorderSide (state, array){
