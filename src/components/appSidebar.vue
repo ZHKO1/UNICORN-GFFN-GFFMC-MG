@@ -52,6 +52,11 @@ export default {
   },
   mounted () {
     var that = this;
+    document.addEventListener('mousedown', (e) => {
+      if (!that.$refs.sideBar.contains(e.target)){
+        that.showSide = false;
+      }
+    })
   }
 }
 </script>

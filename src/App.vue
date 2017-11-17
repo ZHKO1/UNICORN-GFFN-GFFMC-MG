@@ -42,6 +42,7 @@
     min-height: 600px;
     overflow-x: hidden;
     overflow-y: hidden;
+    user-select: none;
   }
   .bg {
     background: url(./images/bg.png) no-repeat center top;
