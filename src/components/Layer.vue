@@ -1,33 +1,35 @@
 <template>
   <div class="layer" :style="style">
-    <img ref="img" :src="pic" draggable="false" ondragstart="(function(){return false})()">
-    <div class="layer_options">
-      <el-form label-position="left" label-width="55px" :model="transform">
-        <el-form-item label="x">
-          <el-input v-model="transform.translate.x"></el-input>
-        </el-form-item>
-        <el-form-item label="y">
-          <el-input v-model="transform.translate.y"></el-input>
-        </el-form-item>
-        <el-form-item label="angle">
-          <el-input v-model="transform.angle"></el-input>
-        </el-form-item>
-        <el-form-item label="scale">
-          <el-input v-model="transform.scale"></el-input>
-        </el-form-item>
-        <el-form-item label="opacity">
-          <el-input v-model="transform.opacity"></el-input>
-        </el-form-item>
-      </el-form>
-      <el-button type="primary" @click="submitOptions()">Save</el-button>
-      <el-button @click="resetOptions()">Reset</el-button>
-    </div>
+    <dragModel ref="content" class="layer_content" :START_X="X" :START_Y="Y" :START_ANGLE="transform.angle" :START_SCALE="transform.scale" :START_OPACITY="transform.opacity" @onPan="unpdateOptions" @onPanEnd="saveOptions">
+      <img :src="pic" draggable="false" ondragstart="(function(){return false})()">
+    </dragModel>
+    <dragModel class="layer_options">
+        <el-form label-position="left" label-width="55px" :model="transform">
+          <el-form-item label="x">
+            <el-input v-model="transform.translate.x"></el-input>
+          </el-form-item>
+          <el-form-item label="y">
+            <el-input v-model="transform.translate.y"></el-input>
+          </el-form-item>
+          <el-form-item label="angle">
+            <el-input v-model="transform.angle"></el-input>
+          </el-form-item>
+          <el-form-item label="scale">
+            <el-input v-model="transform.scale"></el-input>
+          </el-form-item>
+          <el-form-item label="opacity">
+            <el-input v-model="transform.opacity"></el-input>
+          </el-form-item>
+        </el-form>
+        <el-button type="primary" @click="submitOptions()">Save</el-button>
+        <el-button @click="resetOptions()">Reset</el-button>
+    </dragModel>
   </div>
 </template>
 
 <script>
-import Hammer from "hammerjs"
-import {reqAnimationFrame} from "./../lib/drag.js"
+import dragModel from './dragModel'
+
 export default {
   name: 'layer',
   data () {
@@ -54,10 +56,6 @@ export default {
     layerID: Number,
     zIndex: Number,
     pic: String,
-    type: {
-      type: String,
-      default: 'art'
-    },
     START_X: {
       type: Number,
       default: 0
@@ -79,52 +77,25 @@ export default {
       default: 1
     },
   },
+  components: {
+    dragModel
+  },
   methods: {
-    updateElementTransform() {
+    unpdateOptions({x, y}) {
       var that = this;
-      var transform = that.transform;
-      var el = that.$refs.img;
-      var value = [
-        'translate3d(' + transform.translate.x + 'px, ' + transform.translate.y + 'px, 0)',
-        'scale(' + transform.scale + ', ' + transform.scale + ')',
-        'rotate3d('+ transform.rx +','+ transform.ry +','+ transform.rz +','+  transform.angle + 'deg)'
-      ];
-
-      value = value.join(" ");
-      el.style.webkitTransform = value;
-      el.style.mozTransform = value;
-      el.style.transform = value;
-      el.style.opacity = transform.opacity;
-      that.ticking = false;
-    },
-    requestElementUpdate() {
-      var that = this;
-      if(!that.ticking) {
-        reqAnimationFrame(that.updateElementTransform);
-        that.ticking = true;
-      }
-    },
-    onPan(ev) {
-      var that = this;
-      var el = this.$refs.img;
-      el.className = '';
       that.transform.translate = {
-        x: parseInt(that.X) + ev.deltaX,
-        y: parseInt(that.Y) + ev.deltaY
+        x: x,
+        y: y
       };
-      that.requestElementUpdate();
     },
-    onPanEnd (ev) {
+    saveOptions({x, y, angle, scale, opacity}) {
       var that = this;
-      var el = this.$refs.img;
-      el.className = '';
       that.transform.translate = {
-        x: parseInt(that.X) + ev.deltaX,
-        y: parseInt(that.Y) + ev.deltaY
+        x: x,
+        y: y
       };
       that.X = parseInt(that.transform.translate.x);
       that.Y = parseInt(that.transform.translate.y);
-      that.requestElementUpdate();
       that.$store.commit('dragSide', {
         id: that.layerID,
         x: that.X,
@@ -138,7 +109,7 @@ export default {
       var that = this;
       that.X = parseInt(that.transform.translate.x);
       that.Y = parseInt(that.transform.translate.y);
-      that.requestElementUpdate();
+      that.$refs.content.requestElementUpdate();
       that.$store.commit('dragSide', {
         id: that.layerID,
         x: that.X,
@@ -157,7 +128,7 @@ export default {
       that.transform.angle = 0;
       that.transform.scale = 1;
       that.transform.opacity = 1;
-      that.requestElementUpdate();
+      that.$refs.content.requestElementUpdate();
       that.$store.commit('dragSide', {
         id: that.layerID,
         x: that.X,
@@ -166,17 +137,9 @@ export default {
         scale: that.transform.scale,
         opacity: that.transform.opacity
       })
-    }
+    },
   },
   mounted () {
-    var that = this;
-    console.log(that.transform);
-    var el = this.$refs.img;
-    var mc = new Hammer.Manager(el);
-    mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
-    mc.on("panstart panmove", this.onPan);
-    mc.on("panend", this.onPanEnd);
-    that.requestElementUpdate();
   }
 }
 </script>
@@ -187,12 +150,17 @@ export default {
     position: absolute;
     width: 90vw;
     height: 80vh;
-    img{
-      display: block;
-      max-width: 90vw;
-      max-height: 80vh;
-      margin: 0 auto;
+    .layer_content{
+      position: absolute;
+      width:100%;
+      height:100%;
+      img{
+        display: block;
+        max-width: 90vw;
+        max-height: 80vh;
+        margin: 0 auto;
 
+      }
     }
     .layer_options{
       position: absolute;

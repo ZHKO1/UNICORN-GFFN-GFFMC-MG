@@ -16,7 +16,6 @@ export default {
     },
 
     dragSide (state, options){
-      console.log(options);
       var id = options.id;
       Vue.set(state.SideLi[id], "x", options.x);
       Vue.set(state.SideLi[id], "y", options.y);
