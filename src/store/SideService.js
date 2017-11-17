@@ -22,6 +22,7 @@ export default {
       Vue.set(state.SideLi[id], "y", options.y);
       Vue.set(state.SideLi[id], "angle", options.angle);
       Vue.set(state.SideLi[id], "scale", options.scale);
+      Vue.set(state.SideLi[id], "opacity", options.opacity);
     },
 
     reorderSide (state, array){

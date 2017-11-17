@@ -2,7 +2,7 @@
   <div class="layer" :style="style">
     <img ref="img" :src="pic" draggable="false" ondragstart="(function(){return false})()">
     <div class="layer_options">
-      <el-form label-position="left" label-width="50px" :model="transform">
+      <el-form label-position="left" label-width="55px" :model="transform">
         <el-form-item label="x">
           <el-input v-model="transform.translate.x"></el-input>
         </el-form-item>
@@ -14,6 +14,9 @@
         </el-form-item>
         <el-form-item label="scale">
           <el-input v-model="transform.scale"></el-input>
+        </el-form-item>
+        <el-form-item label="opacity">
+          <el-input v-model="transform.opacity"></el-input>
         </el-form-item>
       </el-form>
       <el-button type="primary" @click="submitOptions()">Save</el-button>
@@ -39,7 +42,8 @@ export default {
         angle: that.START_ANGLE,
         rx: 0,
         ry: 0,
-        rz: 1
+        rz: 1,
+        opacity: that.START_OPACITY
       },
       style: {
         "z-index": that.zIndex,
@@ -69,7 +73,11 @@ export default {
     START_SCALE: {
       type: Number,
       default: 1
-    }
+    },
+    START_OPACITY: {
+      type: Number,
+      default: 1
+    },
   },
   methods: {
     updateElementTransform() {
@@ -86,6 +94,7 @@ export default {
       el.style.webkitTransform = value;
       el.style.mozTransform = value;
       el.style.transform = value;
+      el.style.opacity = transform.opacity;
       that.ticking = false;
     },
     requestElementUpdate() {
@@ -121,7 +130,8 @@ export default {
         x: that.X,
         y: that.Y,
         angle: that.transform.angle,
-        scale: that.transform.scale
+        scale: that.transform.scale,
+        opacity: that.transform.opacity
       })
     },
     submitOptions() {
@@ -134,7 +144,8 @@ export default {
         x: that.X,
         y: that.Y,
         angle: that.transform.angle,
-        scale: that.transform.scale
+        scale: that.transform.scale,
+        opacity: that.transform.opacity
       })
     },
     resetOptions() {
@@ -145,13 +156,15 @@ export default {
       that.Y = that.transform.translate.y;
       that.transform.angle = 0;
       that.transform.scale = 1;
+      that.transform.opacity = 1;
       that.requestElementUpdate();
       that.$store.commit('dragSide', {
         id: that.layerID,
         x: that.X,
         y: that.Y,
         angle: that.transform.angle,
-        scale: that.transform.scale
+        scale: that.transform.scale,
+        opacity: that.transform.opacity
       })
     }
   },
