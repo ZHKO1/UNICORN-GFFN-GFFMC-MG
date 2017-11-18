@@ -140,15 +140,12 @@ export default {
       this.transform.translate.y = parseInt(this.Y);
     },
     START_ANGLE: function (val) {
-      console.log(val);
       this.transform.angle = parseInt(val);
     },
     START_SCALE: function (val) {
-      console.log(val);
       this.transform.scale = parseFloat(val);
     },
     START_OPACITY: function (val) {
-      console.log(val);
       this.transform.opacity = parseFloat(val);
     },
   },
