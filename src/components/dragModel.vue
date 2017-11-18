@@ -58,7 +58,6 @@ export default {
         'scale(' + transform.scale + ', ' + transform.scale + ')',
         'rotate3d('+ transform.rx +','+ transform.ry +','+ transform.rz +','+  transform.angle + 'deg)'
       ];
-
       value = value.join(" ");
       el.style.webkitTransform = value;
       el.style.mozTransform = value;
@@ -84,9 +83,9 @@ export default {
       that.$emit("onPan", {
         x: parseInt(that.transform.translate.x),
         y: parseInt(that.transform.translate.y),
-        angle: parseInt(that.transform.translate.angle),
-        scale: parseInt(that.transform.translate.scale),
-        opacity: parseInt(that.transform.translate.opacity)
+        angle: parseInt(that.transform.angle),
+        scale: parseFloat(that.transform.scale),
+        opacity: parseFloat(that.transform.opacity)
       });
     },
     onPanEnd (ev) {
@@ -102,9 +101,9 @@ export default {
       that.$emit("onPanEnd", {
         x: that.X,
         y: that.Y,
-        angle: parseInt(that.transform.translate.angle),
-        scale: parseInt(that.transform.translate.scale),
-        opacity: parseInt(that.transform.translate.opacity)
+        angle: parseInt(that.transform.angle),
+        scale: parseFloat(that.transform.scale),
+        opacity: parseFloat(that.transform.opacity)
       });
     }
   },
@@ -118,12 +117,15 @@ export default {
       this.transform.translate.y = parseInt(this.Y);
     },
     START_ANGLE: function (val) {
+      console.log(val);
       this.transform.angle = parseInt(val);
     },
     START_SCALE: function (val) {
+      console.log(val);
       this.transform.scale = parseFloat(val);
     },
     START_OPACITY: function (val) {
+      console.log(val);
       this.transform.opacity = parseFloat(val);
     },
   },
