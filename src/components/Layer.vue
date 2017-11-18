@@ -1,24 +1,24 @@
 <template>
   <div class="layer" :style="style">
-    <dragModel ref="content" class="layer_content" :START_X="X" :START_Y="Y" :START_ANGLE="transform.angle" :START_SCALE="transform.scale" :START_OPACITY="transform.opacity" @onPan="unpdateOptions" @onPanEnd="saveOptions">
+    <dragModel ref="content" class="layer_content" :START_X="X" :START_Y="Y" :START_ANGLE="ANGLE" :START_SCALE="SCALE" :START_OPACITY="OPACITY" @onPan="unpdateOptions" @onPanEnd="saveOptions">
       <img :src="pic" draggable="false" ondragstart="(function(){return false})()">
     </dragModel>
     <dragModel class="layer_options">
-        <el-form label-position="left" label-width="55px" :model="transform">
+        <el-form label-position="left" label-width="55px">
           <el-form-item label="x">
-            <el-input v-model="transform.translate.x"></el-input>
+            <el-input v-model="INPUT_X"></el-input>
           </el-form-item>
           <el-form-item label="y">
-            <el-input v-model="transform.translate.y"></el-input>
+            <el-input v-model="INPUT_Y"></el-input>
           </el-form-item>
           <el-form-item label="angle">
-            <el-input v-model="transform.angle"></el-input>
+            <el-input v-model="INPUT_ANGLE"></el-input>
           </el-form-item>
           <el-form-item label="scale">
-            <el-input v-model="transform.scale"></el-input>
+            <el-input v-model="INPUT_SCALE"></el-input>
           </el-form-item>
           <el-form-item label="opacity">
-            <el-input v-model="transform.opacity"></el-input>
+            <el-input v-model="INPUT_OPACITY"></el-input>
           </el-form-item>
         </el-form>
         <el-button type="primary" @click="submitOptions()">Save</el-button>
@@ -38,15 +38,14 @@ export default {
       ticking: false,
       X: that.START_X,
       Y: that.START_Y,
-      transform : {
-        translate: { x: that.START_X, y: that.START_Y },
-        scale: that.START_SCALE,
-        angle: that.START_ANGLE,
-        rx: 0,
-        ry: 0,
-        rz: 1,
-        opacity: that.START_OPACITY
-      },
+      SCALE: that.START_SCALE,
+      ANGLE: that.START_ANGLE,
+      OPACITY: that.START_OPACITY,
+      INPUT_X: that.START_X,
+      INPUT_Y: that.START_Y,
+      INPUT_SCALE: that.START_SCALE,
+      INPUT_ANGLE: that.START_ANGLE,
+      INPUT_OPACITY: that.START_OPACITY,
       style: {
         "z-index": that.zIndex,
       }
@@ -83,61 +82,62 @@ export default {
   methods: {
     unpdateOptions({x, y}) {
       var that = this;
-      that.transform.translate = {
-        x: x,
-        y: y
-      };
+      that.INPUT_X = x;
+      that.INPUT_Y = y;
     },
     saveOptions({x, y, angle, scale, opacity}) {
       var that = this;
-      that.transform.translate = {
-        x: x,
-        y: y
-      };
-      that.X = parseInt(that.transform.translate.x);
-      that.Y = parseInt(that.transform.translate.y);
+      that.X = x;
+      that.Y = y;
+      that.ANGLE = angle;
+      that.SCALE = scale;
+      that.OPACITY = opacity;
       that.$store.commit('dragSide', {
         id: that.layerID,
         x: that.X,
         y: that.Y,
-        angle: that.transform.angle,
-        scale: that.transform.scale,
-        opacity: that.transform.opacity
+        angle: that.ANGLE,
+        scale: that.SCALE,
+        opacity: that.OPACITY
       })
     },
     submitOptions() {
       var that = this;
-      that.X = parseInt(that.transform.translate.x);
-      that.Y = parseInt(that.transform.translate.y);
+      that.X = parseInt(that.INPUT_X);
+      that.Y = parseInt(that.INPUT_Y);
+      that.ANGLE = parseInt(that.INPUT_ANGLE);
+      that.SCALE = parseFloat(that.INPUT_SCALE);
+      that.OPACITY = parseFloat(that.INPUT_OPACITY);
       that.$refs.content.requestElementUpdate();
       that.$store.commit('dragSide', {
         id: that.layerID,
         x: that.X,
         y: that.Y,
-        angle: that.transform.angle,
-        scale: that.transform.scale,
-        opacity: that.transform.opacity
+        angle: that.ANGLE,
+        scale: that.SCALE,
+        opacity: that.OPACITY
       })
     },
     resetOptions() {
       var that = this;
-      that.transform.translate.x = 0;
-      that.transform.translate.y = 0;
-      that.X = that.transform.translate.x;
-      that.Y = that.transform.translate.y;
-      that.transform.angle = 0;
-      that.transform.scale = 1;
-      that.transform.opacity = 1;
+      that.X = 0;
+      that.Y = 0;
+      that.ANGLE = 0;
+      that.SCALE = 1;
+      that.OPACITY = 1;
       that.$refs.content.requestElementUpdate();
       that.$store.commit('dragSide', {
         id: that.layerID,
         x: that.X,
         y: that.Y,
-        angle: that.transform.angle,
-        scale: that.transform.scale,
-        opacity: that.transform.opacity
+        angle: that.ANGLE,
+        scale: that.SCALE,
+        opacity: that.OPACITY
       })
     },
+    parseInt(val) {
+      return parseInt(val);
+    }
   },
   mounted () {
   }

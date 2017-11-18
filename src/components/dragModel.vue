@@ -82,11 +82,11 @@ export default {
       };
       that.requestElementUpdate();
       that.$emit("onPan", {
-        x: that.transform.translate.x,
-        y: that.transform.translate.y,
-        angle: that.transform.angle,
-        scale: that.transform.scale,
-        opacity: that.transform.opacity
+        x: parseInt(that.transform.translate.x),
+        y: parseInt(that.transform.translate.y),
+        angle: parseInt(that.transform.translate.angle),
+        scale: parseInt(that.transform.translate.scale),
+        opacity: parseInt(that.transform.translate.opacity)
       });
     },
     onPanEnd (ev) {
@@ -102,9 +102,9 @@ export default {
       that.$emit("onPanEnd", {
         x: that.X,
         y: that.Y,
-        angle: that.transform.angle,
-        scale: that.transform.scale,
-        opacity: that.transform.opacity
+        angle: parseInt(that.transform.translate.angle),
+        scale: parseInt(that.transform.translate.scale),
+        opacity: parseInt(that.transform.translate.opacity)
       });
     }
   },
@@ -118,13 +118,13 @@ export default {
       this.transform.translate.y = parseInt(this.Y);
     },
     START_ANGLE: function (val) {
-      this.transform.translate.angle = parseInt(val);
+      this.transform.angle = parseInt(val);
     },
     START_SCALE: function (val) {
-      this.transform.translate.scale = parseInt(val);
+      this.transform.scale = parseFloat(val);
     },
     START_OPACITY: function (val) {
-      this.transform.translate.opacity = parseInt(val);
+      this.transform.opacity = parseFloat(val);
     },
   },
   mounted () {

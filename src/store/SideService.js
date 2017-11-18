@@ -17,11 +17,11 @@ export default {
 
     dragSide (state, options){
       var id = options.id;
-      Vue.set(state.SideLi[id], "x", options.x);
-      Vue.set(state.SideLi[id], "y", options.y);
-      Vue.set(state.SideLi[id], "angle", options.angle);
-      Vue.set(state.SideLi[id], "scale", options.scale);
-      Vue.set(state.SideLi[id], "opacity", options.opacity);
+      options.x && Vue.set(state.SideLi[id], "x", parseInt(options.x));
+      options.y && Vue.set(state.SideLi[id], "y", parseInt(options.y));
+      options.angle && Vue.set(state.SideLi[id], "angle", parseInt(options.angle));
+      options.scale && Vue.set(state.SideLi[id], "scale", parseFloat(options.scale));
+      options.opacity && Vue.set(state.SideLi[id], "opacity", parseFloat(options.opacity));
     },
 
     reorderSide (state, array){
