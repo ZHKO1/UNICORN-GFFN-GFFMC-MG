@@ -1,9 +1,9 @@
 <template>
   <div class="layer" :style="style">
-    <dragModel ref="content" class="layer_content" :START_X="X" :START_Y="Y" :START_ANGLE="ANGLE" :START_SCALE="SCALE" :START_OPACITY="OPACITY" @onPan="unpdateOptions" @onPanEnd="saveOptions">
+    <dragModel ref="content" class="layer_content" :START_X="X" :START_Y="Y" :START_ANGLE="ANGLE" :START_SCALE="SCALE" :START_OPACITY="OPACITY" @onTap="toggleOptions" @onPan="unpdateOptions" @onPanEnd="saveOptions">
       <img :src="pic" draggable="false" ondragstart="(function(){return false})()">
     </dragModel>
-    <dragModel class="layer_options">
+    <dragModel class="layer_options" :class="{'show': showOptions}">
         <el-form label-position="left" label-width="55px">
           <el-form-item label="x">
             <el-input v-model="INPUT_X"></el-input>
@@ -35,6 +35,7 @@ export default {
   data () {
     var that = this;
     return {
+      showOptions: false,
       ticking: false,
       X: that.START_X,
       Y: that.START_Y,
@@ -85,6 +86,9 @@ export default {
     dragModel
   },
   methods: {
+    toggleOptions() {
+      this.showOptions = !this.showOptions;
+    },
     unpdateOptions({x, y}) {
       var that = this;
       that.INPUT_X = x;
@@ -178,6 +182,10 @@ export default {
       background: white;
       border-radius: 15px;
       border: 1px solid #D3D3D3;
+      display: none;
+      &.show{
+        display: block;
+      }
     }
   }
 </style>

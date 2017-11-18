@@ -73,6 +73,11 @@ export default {
         that.ticking = true;
       }
     },
+    onTap(ev) {
+      var that = this;
+      console.log("tap");
+      that.$emit("onTap");
+    },
     onPanStart(ev) {
       var that = this;
       switch (ev.target.tagName.toLocaleUpperCase()){
@@ -154,6 +159,10 @@ export default {
     var el = this.$refs.dragObj;
     var mc = new Hammer.Manager(el);
     mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
+    mc.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
+    mc.add(new Hammer.Tap());
+
+    mc.on("tap", this.onTap);
     mc.on("panstart", this.onPanStart);
     mc.on("panmove", this.onPan);
     mc.on("panend", this.onPanEnd);
