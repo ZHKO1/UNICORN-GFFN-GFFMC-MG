@@ -12,6 +12,7 @@ export default {
   data () {
     var that = this;
     return {
+      dragable: true,
       ticking: false,
       X: that.START_X,
       Y: that.START_Y,
@@ -72,39 +73,61 @@ export default {
         that.ticking = true;
       }
     },
+    onPanStart(ev) {
+      var that = this;
+      switch (ev.target.tagName.toLocaleUpperCase()){
+        case "INPUT":
+          that.dragable = false;
+          break;
+        case "BUTTON":
+          that.dragable = false;
+          break;
+        default:
+          that.dragable = true;
+          break;
+      }
+    },
     onPan(ev) {
       var that = this;
-      var el = this.$refs.dragObj;
-      that.transform.translate = {
-        x: parseInt(that.X) + ev.deltaX,
-        y: parseInt(that.Y) + ev.deltaY
-      };
-      that.requestElementUpdate();
-      that.$emit("onPan", {
-        x: parseInt(that.transform.translate.x),
-        y: parseInt(that.transform.translate.y),
-        angle: parseInt(that.transform.angle),
-        scale: parseFloat(that.transform.scale),
-        opacity: parseFloat(that.transform.opacity)
-      });
+      if(that.dragable){
+        var el = this.$refs.dragObj;
+        that.transform.translate = {
+          x: parseInt(that.X) + ev.deltaX,
+          y: parseInt(that.Y) + ev.deltaY
+        };
+        that.requestElementUpdate();
+        that.$emit("onPan", {
+          x: parseInt(that.transform.translate.x),
+          y: parseInt(that.transform.translate.y),
+          angle: parseInt(that.transform.angle),
+          scale: parseFloat(that.transform.scale),
+          opacity: parseFloat(that.transform.opacity)
+        });
+      }else{
+        ev.preventDefault();
+      }
     },
     onPanEnd (ev) {
       var that = this;
-      var el = this.$refs.dragObj;
-      that.transform.translate = {
-        x: parseInt(that.X) + ev.deltaX,
-        y: parseInt(that.Y) + ev.deltaY
-      };
-      that.X = parseInt(that.transform.translate.x);
-      that.Y = parseInt(that.transform.translate.y);
-      that.requestElementUpdate();
-      that.$emit("onPanEnd", {
-        x: that.X,
-        y: that.Y,
-        angle: parseInt(that.transform.angle),
-        scale: parseFloat(that.transform.scale),
-        opacity: parseFloat(that.transform.opacity)
-      });
+      if(that.dragable){
+        var el = this.$refs.dragObj;
+        that.transform.translate = {
+          x: parseInt(that.X) + ev.deltaX,
+          y: parseInt(that.Y) + ev.deltaY
+        };
+        that.X = parseInt(that.transform.translate.x);
+        that.Y = parseInt(that.transform.translate.y);
+        that.requestElementUpdate();
+        that.$emit("onPanEnd", {
+          x: that.X,
+          y: that.Y,
+          angle: parseInt(that.transform.angle),
+          scale: parseFloat(that.transform.scale),
+          opacity: parseFloat(that.transform.opacity)
+        });
+      }else{
+        ev.preventDefault();
+      }
     }
   },
   watch: {
@@ -134,7 +157,8 @@ export default {
     var el = this.$refs.dragObj;
     var mc = new Hammer.Manager(el);
     mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
-    mc.on("panstart panmove", this.onPan);
+    mc.on("panstart", this.onPanStart);
+    mc.on("panmove", this.onPan);
     mc.on("panend", this.onPanEnd);
     that.requestElementUpdate();
   }
