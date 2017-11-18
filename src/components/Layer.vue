@@ -126,10 +126,15 @@ export default {
     resetOptions() {
       var that = this;
       that.X = 0;
+      that.INPUT_X = 0;
       that.Y = 0;
+      that.INPUT_Y = 0
       that.ANGLE = 0;
+      that.INPUT_ANGLE = 0;
       that.SCALE = 1;
+      that.INPUT_SCALE = 1;
       that.OPACITY = 1;
+      that.INPUT_OPACITY = 1;
       that.$refs.content.requestElementUpdate();
       that.$store.commit('dragSide', {
         id: that.layerID,
@@ -138,7 +143,7 @@ export default {
         angle: that.ANGLE,
         scale: that.SCALE,
         opacity: that.OPACITY
-      })
+      });
     }
   },
   mounted () {
