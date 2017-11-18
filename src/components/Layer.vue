@@ -142,8 +142,6 @@ export default {
     }
   },
   mounted () {
-    var that = this;
-    FUCK[that.name] = that;
   }
 }
 </script>
