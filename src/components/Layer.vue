@@ -46,8 +46,12 @@ export default {
       INPUT_SCALE: that.START_SCALE,
       INPUT_ANGLE: that.START_ANGLE,
       INPUT_OPACITY: that.START_OPACITY,
-      style: {
-        "z-index": that.zIndex,
+    }
+  },
+  computed: {
+    style: function () {
+      return {
+        'z-index': this.zIndex
       }
     }
   },
@@ -55,6 +59,7 @@ export default {
     layerID: Number,
     zIndex: Number,
     pic: String,
+    name: String,
     START_X: {
       type: Number,
       default: 0
@@ -134,12 +139,11 @@ export default {
         scale: that.SCALE,
         opacity: that.OPACITY
       })
-    },
-    parseInt(val) {
-      return parseInt(val);
     }
   },
   mounted () {
+    var that = this;
+    FUCK[that.name] = that;
   }
 }
 </script>

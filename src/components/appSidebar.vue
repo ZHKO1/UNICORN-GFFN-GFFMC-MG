@@ -46,7 +46,7 @@ export default {
         return this.$store.state.SideService.SideLi
       },
       set(value) {
-        this.$store.commit('reorderSide', value)
+        this.$store.commit('reorderSide', value);
       }
     }
   },

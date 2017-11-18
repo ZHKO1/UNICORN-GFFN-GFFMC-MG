@@ -10,7 +10,7 @@ import router from './router'
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 Vue.use(ElementUI)
-
+window.FUCK = {};
 new Vue({
   el: '#app',
   store,
